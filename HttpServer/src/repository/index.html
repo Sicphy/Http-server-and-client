@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyGoodFon</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
+            integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
+            crossorigin="anonymous"></script>
+</head>
+<body onload="vote()">
+<script>
+    function getXmlHttp(){
+        var xmlhttp;
+        try {
+            xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
+            try {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E) {
+                xmlhttp = false;
+            }
+        }
+        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+            xmlhttp = new XMLHttpRequest();
+        }
+        return xmlhttp;
+    }
+
+
+    function vote() {
+        var xmlhttp = getXmlHttp();
+        var url = "myTutorials.txt";
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var arr = this.responseText.split(" ");
+                myFunction(arr);
+            }
+        };
+        xmlhttp.open("GET", "http://localhost:8080/images_names.txt",false);
+        xmlhttp.send(null);
+    }
+
+    function myFunction(names) {
+        var main = document.createElement('main');
+        if(names.length > 0) {
+        for (var i = 0; i < names.length; i++) {
+            var div = document.createElement('div');
+            var img = document.createElement('img');
+            var a = document.createElement('a');
+            div.className = 'image-wrapper';
+            img.setAttribute('src', 'http://localhost:8080/' + names[i]);
+            img.className = 'image';
+            a.setAttribute('href', 'http://localhost:8080/' + names[i]);
+            a.appendChild(img);
+            div.appendChild(a);
+            main.appendChild(div);
+        }
+        }
+        document.body.appendChild(main);
+    }
+</script>
+
+<header>
+    <div class="logo-wrapper"><p class="logo">MyGoodFon</p></div>
+    <nav>
+        <ul>
+            <li><a href="" class="nav-link">Home</a></li>
+            <li><a href="http://localhost:8080/about2.txt" class="nav-link">About</a></li>
+            <li><a href="" class="nav-link">Reviews</a></li>
+        </ul>
+    </nav>
+    <div class="social-icons">
+        <a href="" class="social-icons-link"><i class="fab fa-twitter"></i></a>
+        <a href="" class="social-icons-link"><i class="fab fa-youtube"></i></a>
+        <a href="" class="social-icons-link"><i class="fab fa-facebook-f"></i></a>
+    </div>
+</header>
+</body>
+</html>
