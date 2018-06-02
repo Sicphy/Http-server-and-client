@@ -23,7 +23,6 @@ public class HttpRequest {
     public void readInputHeaders() throws Throwable {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-
         while(true) {
             String s = br.readLine();
             if(s == null || s.trim().length() == 0) {
@@ -34,8 +33,6 @@ public class HttpRequest {
         }
 
         setHttpHeader(request);
-
-        //System.out.println(request);
 
         if(method.equals("PUT")) {
             long s;
@@ -54,11 +51,6 @@ public class HttpRequest {
         }
 
         System.out.println(request);
-        /*System.out.println(method);
-        System.out.println(url);
-        System.out.println(version);
-        System.out.println(attributes);
-        System.out.println("File name: " + fileName);*/
     }
 
     private void setHttpHeader(String header) throws Throwable {
@@ -91,7 +83,6 @@ public class HttpRequest {
         }
     }
 
-    public String getUrl() { return this.url; }
     public String getFileName() { return this.fileName; }
     public String  getMethod() { return this.method; }
 }

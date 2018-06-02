@@ -14,7 +14,7 @@ public class GetMethod implements HttpMethod {
      public void executeMethod(String fileName, OutputStream os) {
           try {
                os.write(arrangeResponse(fileName).getBytes());
-               os.write(getBodyResponse(fileName));
+               os.write(getBodyResponse());
           } catch (IOException e) {
                e.printStackTrace();
           }
@@ -25,34 +25,34 @@ public class GetMethod implements HttpMethod {
           PropertyResourceBundle contentTypePR = (PropertyResourceBundle)
                   PropertyResourceBundle.getBundle("http.protocol.contentType");
           String expansion;
-          Response response = new Response();
+          Header header = new Header();
 
           if(fileName == null) {
-               response.setState(notFoundResponse);
-               response.setType("text/html");
+               header.setState(notFoundResponse);
+               header.setType("text/html");
                file = new File("src/repository/Error404.html");
           } else if(fileName.contains(".")) {
                expansion = fileName.substring(fileName.lastIndexOf('.'));
                if (folder.isExist(fileName)) {
-                    response.setState(okResponse);
-                    response.setType(contentTypePR.getString(expansion));
+                    header.setState(okResponse);
+                    header.setType(contentTypePR.getString(expansion));
                     file = new File("src/repository/" + fileName);
                } else {
-                    response.setState(notFoundResponse);
-                    response.setType("text/html");
+                    header.setState(notFoundResponse);
+                    header.setType("text/html");
                     file = new File("src/repository/Error404.html");
                }
           } else {
-               response.setState(notFoundResponse);
-               response.setType("text/html");
+               header.setState(notFoundResponse);
+               header.setType("text/html");
                file = new File("src/repository/Error404.html");
           }
 
-          response.setLength(file.length());
-          return response.getResponse();
+          header.setLength(file.length());
+          return header.getHeader();
      }
 
-     private byte[] getBodyResponse(String fileName) {
+     private byte[] getBodyResponse() {
           try {
                return Files.readAllBytes(file.toPath());
           } catch (IOException e) {

@@ -9,4 +9,5 @@ public class StringConstants {
     public static String internalErrorResponse = "500 Internal error";
     public static String okResponse = "200 OK";
     public static String notImplementedResponse = "501 NOT IMPLEMENTED";
+    public static String unavailableResponse = "503 SERVICE UNAVAILABLE";
 }

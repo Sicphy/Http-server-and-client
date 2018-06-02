@@ -9,19 +9,19 @@ public class PutMethod implements HttpMethod {
     @Override
     public void executeMethod(String fileName, OutputStream os) {
 
-        Response response = new Response();
+        Header header = new Header();
         Folder folder = new Folder("src/repository");
 
 
         if(folder.isExist(fileName)) {
-            response.setState(createResponse);
-            response.setContentLocation(fileName);
+            header.setState(createResponse);
+            header.setContentLocation(fileName);
         } else {
-            response.setState(internalErrorResponse);
+            header.setState(internalErrorResponse);
         }
 
         try {
-            os.write(response.getResponse().getBytes());
+            os.write(header.getHeader().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

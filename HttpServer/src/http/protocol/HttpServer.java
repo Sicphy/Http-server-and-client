@@ -9,9 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static http.protocol.StringConstants.badRequestResponse;
-import static http.protocol.StringConstants.notImplementedResponse;
-import static http.protocol.StringConstants.notSupportedHttpVersionResponse;
+import static http.protocol.StringConstants.*;
 
 public class HttpServer {
 
@@ -24,14 +22,14 @@ public class HttpServer {
         while (true) {
             Socket s = ss.accept();
             System.err.println("Client accepted");
-            Thread thread = threadPool.getThread(new SocketProcessor(s));
-            while(thread == null) {
-                thread = threadPool.getThread(new SocketProcessor(s));
+            if(ThreadPool.check()) {
+                Thread thread = threadPool.getThread(new SocketProcessor(s));
+                thread.start();
+            } else {
+                BadRequestResponse badRequestResponse = new BadRequestResponse(s.getOutputStream());
+                badRequestResponse.setResponse(unavailableResponse);
+                badRequestResponse.sendResponse();
             }
-            thread.start();
-
-
-            //new Thread(new SocketProcessor(s)).start();
         }
     }
 
@@ -47,16 +45,13 @@ public class HttpServer {
             this.request = new HttpRequest(s.getInputStream());
             this.response = new HttpResponse(s.getOutputStream());
             this.badRequest = new BadRequestResponse(s.getOutputStream());
-            this. timer = new Timer();
         }
 
         public void run() {
             try {
-                //   (new TimerThread(Thread.currentThread())).run();
                 request.readInputHeaders();
                 response.setRequest(request);
                 response.writeResponse();
-                //timer.schedule(new MyTimerTask(Thread.currentThread()), 10000);
             }  catch (BadRequestException e) {
               badRequest.setResponse(badRequestResponse);
               badRequest.sendResponse();
@@ -71,40 +66,12 @@ public class HttpServer {
             } finally {
                 try {
                     s.close();
+                    ThreadPool.freeThread();
                 } catch (Throwable t) {
-                    /*do nothing*/
+                    t.printStackTrace();
                 }
             }
             System.err.println("Client processing finished");
-            ThreadPool.freeThread();
-        }
-    }
-
-    private static class MyTimerTask extends TimerTask {
-        Thread thread;
-
-        MyTimerTask(Thread thread) {
-            this.thread = thread;
-        }
-
-        @Override
-        public void run() {
-            this.thread.interrupt();
-            System.err.println("Client processing finished");
-        }
-    }
-
-    private static class TimerThread extends Thread {
-        private Thread thread;
-
-        TimerThread(Thread thread) {
-            this.thread = thread;
-        }
-
-        @Override
-        public void run() {
-            Timer timer = new Timer();
-            timer.schedule(new MyTimerTask(this.thread), 4000);
         }
     }
 

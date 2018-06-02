@@ -17,10 +17,10 @@ public class BadRequestResponse {
     }
 
     public void sendResponse() {
-        Response response = new Response();
-        response.setState(this.response);
+        Header header = new Header();
+        header.setState(this.response);
         try {
-            os.write(response.getResponse().getBytes());
+            os.write(header.getHeader().getBytes());
             os.flush();
         } catch (IOException e) {
             e.printStackTrace();

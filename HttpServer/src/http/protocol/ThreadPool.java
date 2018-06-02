@@ -16,4 +16,12 @@ public class ThreadPool {
             threadNumber++;
         }
     }
+
+    static public boolean check() {
+        if(threadNumber == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

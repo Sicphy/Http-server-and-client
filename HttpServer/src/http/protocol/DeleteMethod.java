@@ -7,25 +7,24 @@ import static http.protocol.StringConstants.*;
 public class DeleteMethod implements HttpMethod {
     @Override
     public void executeMethod(String fileName, OutputStream os) {
-        System.out.println(fileName);
         Folder folder = new Folder("src/repository");
-        Response response = new Response();
+        Header header = new Header();
 
         if(fileName == null || !fileName.contains(".")) {
-            response.setState(notFoundResponse);
+            header.setState(notFoundResponse);
         } else if(folder.isExist(fileName)) {
             File file = new File("src/repository/" + fileName);
             if(file.delete()) {
-                response.setState(okResponse);
+                header.setState(okResponse);
             } else {
-                response.setState(internalErrorResponse);
+                header.setState(internalErrorResponse);
             }
         } else {
-            response.setState(notFoundResponse);
+            header.setState(notFoundResponse);
         }
 
         try {
-            os.write(response.getResponse().getBytes());
+            os.write(header.getHeader().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -18,11 +18,7 @@ public class ChooseMethod {
                 PropertyResourceBundle.getBundle("http.protocol.methods");
         String className = null;
 
-        if(pr.containsKey(method)) {
-                className = pr.getString(method);
-        } else {
-            className = pr.getString("Error404");
-        }
+        className = pr.getString(method);
 
         try {
             this.cl = Class.forName(className);
@@ -34,10 +30,10 @@ public class ChooseMethod {
         return null;
     }
 
-    public String executeMethod(String url, OutputStream os) throws Exception {
+    public String executeMethod(String fileName, OutputStream os) throws Exception {
         Class[] paramTypes = new Class[] {String.class, OutputStream.class};
         Method method = this.cl.getMethod("executeMethod", paramTypes);
-        String answer = (String)method.invoke(this.httpMethod, url, os);
+        String answer = (String)method.invoke(this.httpMethod, fileName, os);
         return answer;
     }
 
