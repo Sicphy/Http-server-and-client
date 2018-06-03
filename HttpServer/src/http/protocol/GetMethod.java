@@ -8,7 +8,7 @@ import java.util.PropertyResourceBundle;
 
 import static http.protocol.StringConstants.*;
 
-public class GetMethod implements HttpMethod {
+public class GetMethod extends HttpMethod {
      private File file;
 
      public void executeMethod(String fileName, OutputStream os) {
@@ -21,11 +21,9 @@ public class GetMethod implements HttpMethod {
      }
 
      private String arrangeResponse(String fileName) {
-          Folder folder = new Folder("src/repository");
           PropertyResourceBundle contentTypePR = (PropertyResourceBundle)
                   PropertyResourceBundle.getBundle("http.protocol.contentType");
           String expansion;
-          Header header = new Header();
 
           if(fileName == null) {
                header.setState(notFoundResponse);

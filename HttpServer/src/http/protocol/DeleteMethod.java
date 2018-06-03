@@ -4,12 +4,9 @@ import java.io.*;
 
 import static http.protocol.StringConstants.*;
 
-public class DeleteMethod implements HttpMethod {
+public class DeleteMethod extends HttpMethod {
     @Override
     public void executeMethod(String fileName, OutputStream os) {
-        Folder folder = new Folder("src/repository");
-        Header header = new Header();
-
         if(fileName == null || !fileName.contains(".")) {
             header.setState(notFoundResponse);
         } else if(folder.isExist(fileName)) {

@@ -5,10 +5,12 @@ import java.io.OutputStream;
 public class HttpResponse {
     private OutputStream os;
     private HttpRequest request;
+    private ChooseMethod chooseMethod;
 
     HttpResponse(OutputStream os) {
         this.os = os;
         this.request = null;
+        chooseMethod = new ChooseMethod();
     }
 
     public void setRequest(HttpRequest request) {
@@ -16,7 +18,6 @@ public class HttpResponse {
     }
 
     public void writeResponse() throws Throwable {
-        ChooseMethod chooseMethod = new ChooseMethod();
         chooseMethod.chooseMethodClass(this.request.getMethod());
         chooseMethod.executeMethod(this.request.getFileName(), this.os);
         os.flush();
